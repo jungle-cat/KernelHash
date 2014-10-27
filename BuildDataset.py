@@ -22,32 +22,38 @@ def load_ytdataset(directory, maxpersons=100, maxdesc_each=120, outputname='data
         print 'load path %s' % desc_path
         desc_names = [item for item in os.listdir(desc_path) if item.startswith('aligned_')]
         if desc_names:
-            desc_name = os.path.join(desc_path, desc_names[0])
-            print '\tload desc %s' % desc_name
-            descs = loadmat(desc_name)
-            
-            feature = descs['VID_DESCS_LBP'].T
-            numpy.random.shuffle(feature)
-            nfeature = feature.shape[0]
-            
-            if nfeature < maxdesc_each:
-                nf = nfeature
-            else: nf = maxdesc_each
-            
-            if descriptors is None:
-                ndims = feature.shape[1]
-                descriptors = numpy.zeros((expected_num, ndims))
-            end = start + nf
+            ndesc_names = len(desc_names)
+            ndesc_per_video = 60 / ndesc_names
+            for video_name in desc_names:
+                desc_name = os.path.join(desc_path, video_name)
+                descs = loadmat(desc_name)
+                
+                feature = descs['VID_DESCS_LBP'].T
+                numpy.random.shuffle(feature)
+                nfeature = feature.shape[0]
+                
+                if descriptors is None:
+                    ndims = feature.shape[1]
+                    descriptors = numpy.zeros((expected_num, ndims))
+                
+                if nfeature < ndesc_per_video:
+                    nf = nfeature
+                else:
+                    nf = ndesc_per_video
+                
+                end = start + nf
+                if end >= expected_num:
+                    end = expected_num
+                    descriptors[start : expected_num] = feature[ : end-start]
+                    labels[start : end] = i+1
+                    start = end
+                    break
+                else:
+                    descriptors[start : end] = feature[ : nf]
+                    labels[start : end] = i+1
+                    start = end
             if end >= expected_num:
-                end = expected_num
-                descriptors[start : expected_num] = feature[ : end-start]
-                labels[start : end] = i+1
-                start = end
                 break
-            else:
-                descriptors[start : end] = feature[:nf]
-                labels[start : end] = i+1
-                start = end
             
     savemat(outputname, {'descriptors':descriptors[:start], 'labels':labels[:start]})
     
