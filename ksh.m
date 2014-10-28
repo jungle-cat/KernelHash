@@ -2,6 +2,7 @@
 % 
 % KSH main program of CVPR'12 "Supervised Hashing with Kernels"
 % Written by Wei Liu (wliu@ee.columbia.edu) 
+% Modified by jungle-cat (ustc.revolutionary@gmail.com)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %load demo_patch_data;
