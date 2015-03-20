@@ -7,12 +7,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %load demo_patch_data;
 
+%% Load datamatrix
 load feature_id.mat
 
-[total_num, ~] = size(descript
-
-total_num = 59470;
-train_num = 50000;
+% set datamatrix size
+[total_num, ~] = size(descriptors);
+train_num = total_num * 0.8;
 
 randindices0 = randperm(total_num);
 randindices = randindices0(1:train_num);
@@ -21,21 +21,27 @@ traingnd = labels(randindices);
 randindices = randindices0(train_num+1:end);
 testdata = descriptors(randindices', :);
 testgnd = labels(randindices);
-
-
-
 [n,d] = size(traindata);
 tn = size(testdata,1);
+
+%% Set the options
+m = 300;    % set the anchor numbers
+r = 48;     % set the number of bits
+trn = 2000; % set the number of labeled training data
+%
+
+
+
+
 range = 10; % number of returned neighbors
-m = 300;    % number of anchors
-r = 48;     % number of hash bits
-trn = 2000; % number of labeled training samples
 %load label_index_2k; % indexes of labeled samples
 %load sample_300;     % indexes of anchors
 randindices0 = randperm(train_num);
 sample = randindices0(1:m);
 randindices0 = randperm(train_num);
 label_index = randindices0(1:trn);
+
+
 
 %% Kernel-Based Supervised Hashing (KSH)
 % kernel computing 
@@ -104,6 +110,9 @@ tep = find(Y<=0);
 Y(tep) = -1;
 train_time = toc;
 [train_time]
+
+save hash_options A1 anchor mvec sigma;
+
 save ksh_48 Y A1 anchor mvec sigma;
 clear tep; 
 clear get_vec;
