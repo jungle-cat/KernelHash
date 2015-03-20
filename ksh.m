@@ -7,6 +7,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %load demo_patch_data;
 
+load feature_id.mat
+
+[total_num, ~] = size(descript
+
 total_num = 59470;
 train_num = 50000;
 
