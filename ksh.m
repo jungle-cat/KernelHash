@@ -112,6 +112,8 @@ train_time = toc;
 [train_time]
 
 save hash_options A1 anchor mvec sigma;
+return
+
 
 save ksh_48 Y A1 anchor mvec sigma;
 clear tep; 
